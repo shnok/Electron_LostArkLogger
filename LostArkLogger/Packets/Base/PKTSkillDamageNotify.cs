@@ -1,18 +1,46 @@
+using LostArkLogger.Properties;
 using System;
 using System.Collections.Generic;
 namespace LostArkLogger
 {
-    public partial class PKTSkillDamageNotify
-    {
-        public PKTSkillDamageNotify(BitReader reader)
-        {
-            if (Properties.Settings.Default.Region == Region.Steam) SteamDecode(reader);
-            if (Properties.Settings.Default.Region == Region.Korea) KoreaDecode(reader);
-        }
-        public UInt64 SourceId;
-        public UInt32 SkillEffectId;
-        public UInt32 SkillId;
+    public class PKTSkillDamageNotify {
+        // Fields
+        public ulong SourceId;
+        public uint SkillEffectId;
+        public uint SkillId;
         public List<SkillDamageEvent> skillDamageEvents;
-        public Byte b;
+        public byte b;
+
+        // Methods
+        public PKTSkillDamageNotify(BitReader reader) {
+            if(Settings.Default.Region == Region.Steam) {
+                this.SteamDecode(reader);
+            }
+            if(Settings.Default.Region == Region.Korea) {
+                this.KoreaDecode(reader);
+            }
+        }
+
+        public void KoreaDecode(BitReader reader) {
+            this.skillDamageEvents = reader.ReadList<SkillDamageEvent>(0);
+            this.b = reader.ReadByte();
+            this.SourceId = reader.ReadUInt64();
+            this.SkillEffectId = reader.ReadUInt32();
+            this.SkillId = reader.ReadUInt32();
+        }
+
+        public void SteamDecode(BitReader reader) {
+            this.SkillId = reader.ReadUInt32();
+            this.SkillEffectId = reader.ReadUInt32();
+            this.skillDamageEvents = reader.ReadList<SkillDamageEvent>(0);
+            this.b = reader.ReadByte();
+            this.SourceId = reader.ReadUInt64();
+        }
     }
+
+
+    
+
+
+
 }

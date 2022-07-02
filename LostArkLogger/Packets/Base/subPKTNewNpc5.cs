@@ -1,15 +1,41 @@
+using LostArkLogger.Properties;
 using System;
 using System.Collections.Generic;
 namespace LostArkLogger
 {
-    public partial class subPKTNewNpc5
-    {
-        public subPKTNewNpc5(BitReader reader)
-        {
-            if (Properties.Settings.Default.Region == Region.Steam) SteamDecode(reader);
-            if (Properties.Settings.Default.Region == Region.Korea) KoreaDecode(reader);
+    public class subPKTNewNpc5 {
+        // Fields
+        public uint num;
+        public List<byte> b = new List<byte>();
+
+        // Methods
+        public subPKTNewNpc5(BitReader reader) {
+            if(Settings.Default.Region == Region.Steam) {
+                this.SteamDecode(reader);
+            }
+            if(Settings.Default.Region == Region.Korea) {
+                this.KoreaDecode(reader);
+            }
         }
-        public UInt32 num;
-        public List<Byte> b = new List<Byte>();
+
+        public void KoreaDecode(BitReader reader) {
+            this.num = reader.ReadUInt32();
+            for(int i = 0; i < this.num; i++) {
+                this.b.Add(reader.ReadByte());
+            }
+        }
+
+        public void SteamDecode(BitReader reader) {
+            this.num = reader.ReadUInt32();
+            for(int i = 0; i < this.num; i++) {
+                this.b.Add(reader.ReadByte());
+            }
+        }
     }
+
+
+    
+
+
+
 }

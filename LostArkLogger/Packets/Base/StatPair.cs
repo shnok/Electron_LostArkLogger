@@ -1,16 +1,44 @@
+using LostArkLogger.Properties;
 using System;
 using System.Collections.Generic;
 namespace LostArkLogger
 {
-    public partial class StatPair
-    {
-        public StatPair(BitReader reader)
-        {
-            if (Properties.Settings.Default.Region == Region.Steam) SteamDecode(reader);
-            if (Properties.Settings.Default.Region == Region.Korea) KoreaDecode(reader);
+    public class StatPair {
+        // Fields
+        public List<long> Value = new List<long>();
+        public List<byte> StatType = new List<byte>();
+        public ushort num;
+
+        // Methods
+        public StatPair(BitReader reader) {
+            if(Settings.Default.Region == Region.Steam) {
+                this.SteamDecode(reader);
+            }
+            if(Settings.Default.Region == Region.Korea) {
+                this.KoreaDecode(reader);
+            }
         }
-        public List<Int64> Value = new List<Int64>();
-        public List<Byte> StatType = new List<Byte>();
-        public UInt16 num;
+
+        public void KoreaDecode(BitReader reader) {
+            this.num = reader.ReadUInt16();
+            for(int i = 0; i < this.num; i++) {
+                this.StatType.Add(reader.ReadByte());
+                this.Value.Add(reader.ReadPackedInt());
+            }
+        }
+
+        public void SteamDecode(BitReader reader) {
+            this.num = reader.ReadUInt16();
+            for(int i = 0; i < this.num; i++) {
+                this.StatType.Add(reader.ReadByte());
+                this.Value.Add(reader.ReadPackedInt());
+            }
+        }
     }
+
+
+    
+
+
+
 }

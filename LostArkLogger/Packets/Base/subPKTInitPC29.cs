@@ -1,19 +1,23 @@
-using LostArkLogger.Properties;
+﻿using LostArkLogger.Properties;
 using System;
 using System.Collections.Generic;
-namespace LostArkLogger
-{
-    public class PKTNewNpc {
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LostArkLogger {
+    public class subPKTInitPC29 {
         // Fields
-        public NpcStruct npcStruct;
+        public long p64_0;
+        public long p64_1;
         public ulong u64;
+        public ushort u16;
         public byte b_0;
         public byte b_1;
         public byte b_2;
-        public byte b_3;
 
         // Methods
-        public PKTNewNpc(BitReader reader) {
+        public subPKTInitPC29(BitReader reader) {
             if(Settings.Default.Region == Region.Steam) {
                 this.SteamDecode(reader);
             }
@@ -23,34 +27,29 @@ namespace LostArkLogger
         }
 
         public void KoreaDecode(BitReader reader) {
+            this.u64 = reader.ReadUInt64();
+            this.p64_0 = reader.ReadPackedInt();
+            this.u16 = reader.ReadUInt16();
             this.b_0 = reader.ReadByte();
-            if(this.b_0 == 1) {
-                this.u64 = reader.ReadUInt64();
-            }
             this.b_1 = reader.ReadByte();
-            this.npcStruct = reader.Read<NpcStruct>(0);
             this.b_2 = reader.ReadByte();
-            if(this.b_2 == 1) {
-                this.b_3 = reader.ReadByte();
-            }
+            this.p64_1 = reader.ReadPackedInt();
         }
 
         public void SteamDecode(BitReader reader) {
+            this.u64 = reader.ReadUInt64();
+            this.p64_0 = reader.ReadPackedInt();
+            this.u16 = reader.ReadUInt16();
             this.b_0 = reader.ReadByte();
-            if(this.b_0 == 1) {
-                this.u64 = reader.ReadUInt64();
-            }
             this.b_1 = reader.ReadByte();
-            if(this.b_1 == 1) {
-                this.b_2 = reader.ReadByte();
-            }
-            this.b_3 = reader.ReadByte();
-            this.npcStruct = reader.Read<NpcStruct>(0);
+            this.b_2 = reader.ReadByte();
+            this.p64_1 = reader.ReadPackedInt();
         }
     }
 
 
     
+
 
 
 
